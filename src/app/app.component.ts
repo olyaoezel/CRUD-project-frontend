@@ -1,5 +1,7 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+
 import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
+import { AuthenticationService } from './authentication.service';
 
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
@@ -17,8 +19,8 @@ interface Genre {
 })
 
 export class AppComponent implements OnInit, AfterContentChecked{
-  constructor(private httpClient: HttpClient,  private changeDetector: ChangeDetectorRef) { }
-
+  constructor(private httpClient: HttpClient,  private changeDetector: ChangeDetectorRef, private authService: AuthenticationService) { }
+  isLoginMode = true;
   selectedFile!: File;
   retrievedResponse: any;
   
@@ -33,6 +35,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
   modalOpen: boolean = false;
   bookId: number = 0;
   bookForm!: FormGroup;
+  authForm!: FormGroup;
 
   activeGenreButton: number = 0;
   pagesTotal: number = 0;
@@ -41,25 +44,34 @@ export class AppComponent implements OnInit, AfterContentChecked{
   chosenCategory: string = "";
 
   loading: boolean = false; 
+  isUserLoggedIn: boolean = false;
+  currentUser: any;
+
 
   ngOnInit() {
+    this.userStatus();
     this.loading = true;
-    this.httpClient.get<Genre[]>('http://localhost:8080/genre/getAllGenres').subscribe(
-      (response) => {
-        if (response) this.loading = false;
-        
-        this.genres = response.sort((a, b) =>
-          a.genre.localeCompare(b.genre));
-      });
-    
-    this.getAllBooks();
+   
+    if (this.isUserLoggedIn) {
+      this.getAllGenres();
+      this.getAllBooks();
+         this.currentUser = sessionStorage.getItem("username");
+    }
+   
     this.resetForm();
+    this.resetAuthForm();
+  
     
   }
 
   // prevents the error NG0100: ExpressionChangedAfterItHasBeenCheckedError when changing the page
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
+  }
+
+   userStatus() {
+    let user = sessionStorage.getItem("username");
+    this.isUserLoggedIn = !(user === null);
   }
 
   getAllBooks() {
@@ -76,6 +88,16 @@ export class AppComponent implements OnInit, AfterContentChecked{
         }
     );
 
+  }
+
+  getAllGenres() {
+     this.httpClient.get<Genre[]>('http://localhost:8080/genre/getAllGenres').subscribe(
+      (response) => {
+        if (response) this.loading = false;
+        
+        this.genres = response.sort((a, b) =>
+          a.genre.localeCompare(b.genre));
+      });
   }
 
  
@@ -151,7 +173,6 @@ export class AppComponent implements OnInit, AfterContentChecked{
     this.httpClient.get<any>('http://localhost:8080/book/getById/' + id)
       .subscribe(
         res => {
-          console.log(res);
 
         //  this.bookForm.patchValue fills out the inputs in the update book modal 
           this.bookForm.patchValue({
@@ -188,6 +209,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
 
    toggleModal() {
      this.modalOpen = !this.modalOpen;
+     this.resetForm();
    }
  
   onSubmit() {
@@ -201,6 +223,52 @@ export class AppComponent implements OnInit, AfterContentChecked{
     
   }
 
+  login(username: string, password: string) {
+    
+    this.authService.login(username, password).subscribe((response: any) => {
+      sessionStorage.setItem("username", username);
+      let tokenStr = response.headers.get('Authorization');
+      sessionStorage.setItem("token", tokenStr);
+    
+      this.userStatus();
+      this.resetAuthForm();
+      this.getAllBooks();
+      this.getAllGenres();
+          
+    });
+  }
+
+  onAuthSubmit() {
+    const { username, password } = this.authForm.value;
+    
+    if (this.isLoginMode) {
+      this.login(username, password);
+    } else {
+      const body = { username: username, password: password };
+      this.httpClient.post("http://localhost:8080/users/signup", body, {  observe: "response" })
+          .subscribe((response: any) => {
+        
+            this.login(username, password);
+          }); 
+    
+     
+      this.resetAuthForm();
+    }
+   
+  }
+
+  logOut() {
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("token");
+
+    this.userStatus();
+  }
+
+
+  onSwitchMode() {
+    this.isLoginMode = !this.isLoginMode;
+  }
+
    resetForm() {
        this.bookForm = new FormGroup({
       'bookTitle': new FormControl(null, [Validators.required]),
@@ -211,6 +279,13 @@ export class AppComponent implements OnInit, AfterContentChecked{
    
       })
    }
+  
+  resetAuthForm() {
+    this.authForm = new FormGroup({
+      'username': new FormControl(null, [Validators.required]),
+      'password': new FormControl(null, [Validators.required])
+    })
+  }
   
   getAPIResponseAndImage(response: any) {
     if (response) this.loading = false;
@@ -248,7 +323,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
        this.httpClient.post("http://localhost:8080/book/upload", uploadImageData, {  observe: "response" })
         .subscribe((response: any) => {
       
-          this.loadBookLIstAfterSubmit(response); 
+          this.loadBookListAfterSubmit(response); 
       }); 
     }
 
@@ -256,14 +331,14 @@ export class AppComponent implements OnInit, AfterContentChecked{
       this.httpClient.put('http://localhost:8080/book/update/' + id, uploadImageData, {  observe: "response" })
       .subscribe((response: any) => {
       
-          this.loadBookLIstAfterSubmit(response); 
+          this.loadBookListAfterSubmit(response); 
       }
     );
     }
    
   }
 
-  loadBookLIstAfterSubmit(response: any) {
+  loadBookListAfterSubmit(response: any) {
     if (response.status === 200 && this.activeGenreButton != 0) this.getByGenre(this.chosenCategory, this.activeGenreButton);
     if(response.status === 200 && this.activeGenreButton === 0) this.getAllBooks();
   }

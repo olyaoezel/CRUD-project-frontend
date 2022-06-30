@@ -1,4 +1,30 @@
-<div class="container">
+<div class="row" *ngIf="!isUserLoggedIn">
+  <div class="col-xs-12 col-md-6 col-md-offset-3 authForm">
+
+    <form  class="form auth" [formGroup]="authForm" (ngSubmit)="onAuthSubmit()">
+      <div class="form-group">
+        <label for="email">Username</label>
+        <input type="text" class="form-control" placeholder="username" formControlName="username" />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="text" class="form-control" placeholder="password" formControlName="password" required minlength="6" />
+      </div>
+      <div class="authBtns">
+        <button class="btn btn-primary " type="submit" [disabled]="authForm.invalid">{{isLoginMode ? 'Login' : 'Sign
+          Up'}}</button> |
+        <button class="btn btn-primary" (click)="onSwitchMode()" type="button">Switch to {{isLoginMode ? 'Sign Up' :
+          'Login'}}</button>
+
+          
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="container" *ngIf="isUserLoggedIn">
+  <p class="currentUser">Logged in as {{currentUser | json}}</p>
+  <button class="btn btn-primary logoutBtn" (click)="logOut()" type="button">Log Out</button>
   <div class="col-md-6 searchInputBox ">
     <input type="search" class="form-control searchInput" id="name" placeholder="Search Library" 
       [(ngModel)]="bookTitle"
