@@ -227,6 +227,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
     
     this.authService.login(username, password).subscribe((response: any) => {
       sessionStorage.setItem("username", username);
+      this.currentUser = username;
       let tokenStr = response.headers.get('Authorization');
       sessionStorage.setItem("token", tokenStr);
     
