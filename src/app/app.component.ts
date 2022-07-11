@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { AuthenticationService } from './authentication.service';
@@ -46,6 +46,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
   loading: boolean = false; 
   isUserLoggedIn: boolean = false;
   currentUser: any;
+  userExists: boolean = false;
 
 
   ngOnInit() {
@@ -246,13 +247,16 @@ export class AppComponent implements OnInit, AfterContentChecked{
       this.login(username, password);
     } else {
       const body = { username: username, password: password };
-      this.httpClient.post("http://localhost:8080/users/signup", body, {  observe: "response" })
-          .subscribe((response: any) => {
-        
+      this.httpClient.post("http://localhost:8080/users/signup", body, {  observe: 'response' })
+          .subscribe(response => {
             this.login(username, password);
-          }); 
+           
+          }, error => {
+           
+            this.userExists = true;
+          } ); 
     
-     
+     this.userExists = false;
       this.resetAuthForm();
     }
    
@@ -263,6 +267,8 @@ export class AppComponent implements OnInit, AfterContentChecked{
     sessionStorage.removeItem("token");
 
     this.userStatus();
+    this.activeGenreButton = 0;
+    this.chosenCategory = "";
   }
 
 

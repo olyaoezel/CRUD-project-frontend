@@ -4,6 +4,7 @@
     <form  class="form auth" [formGroup]="authForm" (ngSubmit)="onAuthSubmit()">
       <div class="form-group">
         <label for="email">Username</label>
+        <div *ngIf="userExists" style="color:red;">username already exists!</div>
         <input type="text" class="form-control" placeholder="username" formControlName="username" />
       </div>
       <div class="form-group">

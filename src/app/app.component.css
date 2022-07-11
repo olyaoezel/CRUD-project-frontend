@@ -24,7 +24,7 @@
 
 .logoutBtn {
     display: block;
-    margin-left: auto;
+    margin: 0 0 10px auto;
 }
 
 .chosenGenre {
@@ -62,18 +62,15 @@
     margin-top: 10px;
 }
 
-.bookList {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
 
+
+.bookList {
     margin: 0 auto;
     padding: 0;
-    max-width: 1200px;
 }
-
 .form-select {
-    width: 15%;
-    margin: 0 15px 0 auto;
+    width: 90%;
+    margin: auto;
 }
 
 .bookItem {
@@ -267,3 +264,18 @@
     vertical-align: middle;
 }
 
+
+@media screen and (min-width: 768px) {
+    .bookList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 1200px;
+    }
+}
+
+@media screen and (min-width: 832px) {
+    .form-select{
+        width: 15%;
+        margin: 0 15px 0 auto;
+    }  
+}
