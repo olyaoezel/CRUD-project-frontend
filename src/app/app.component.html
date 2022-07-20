@@ -3,13 +3,16 @@
 
     <form  class="form auth" [formGroup]="authForm" (ngSubmit)="onAuthSubmit()">
       <div class="form-group">
-        <label for="email">Username</label>
-        <div *ngIf="userExists" style="color:red;">username already exists!</div>
-        <input type="text" class="form-control" placeholder="username" formControlName="username" />
+        <label for="username">Username</label>
+        <!-- <div *ngIf="loginStatusCode === 401 && authForm.get('username').dirty" style="color:red;">username not found</div> -->
+        <div *ngIf="loginStatusCode === 401" style="color:red;">username not found</div>
+        <div *ngIf="userExists" style="color:red;">this user already exists, please login or create a new one</div>
+        <div *ngIf="loginStatusCode === 409" style="color:red;">check your username/password and try again</div>
+        <input type="text" class="form-control" placeholder="username" formControlName="username" required minlength="4" (input)="hideAuthErrorMessage()"/>
       </div>
       <div class="form-group">
         <label for="password">Password</label>
-        <input type="text" class="form-control" placeholder="password" formControlName="password" required minlength="6" />
+        <input type="text" class="form-control" placeholder="password" formControlName="password" required minlength="6" (input)="hideAuthErrorMessage()"/>
       </div>
       <div class="authBtns">
         <button class="btn btn-primary " type="submit" [disabled]="authForm.invalid">{{isLoginMode ? 'Login' : 'Sign

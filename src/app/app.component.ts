@@ -47,6 +47,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
   isUserLoggedIn: boolean = false;
   currentUser: any;
   userExists: boolean = false;
+  loginStatusCode: number = 0;
 
 
   ngOnInit() {
@@ -227,6 +228,7 @@ export class AppComponent implements OnInit, AfterContentChecked{
   login(username: string, password: string) {
     
     this.authService.login(username, password).subscribe((response: any) => {
+
       sessionStorage.setItem("username", username);
       this.currentUser = username;
       let tokenStr = response.headers.get('Authorization');
@@ -237,6 +239,9 @@ export class AppComponent implements OnInit, AfterContentChecked{
       this.getAllBooks();
       this.getAllGenres();
           
+    }, error => {
+      this.loginStatusCode = error.status; 
+     
     });
   }
 
@@ -257,9 +262,13 @@ export class AppComponent implements OnInit, AfterContentChecked{
           } ); 
     
      this.userExists = false;
-      this.resetAuthForm();
     }
    
+  }
+
+  hideAuthErrorMessage() {
+    this.loginStatusCode = 0;
+    this.userExists = false;
   }
 
   logOut() {
