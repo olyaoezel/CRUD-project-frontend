@@ -2,21 +2,11 @@
     margin: 20px auto;
 }
 
-.authForm {
-    margin: auto;
-}
-
-.form.auth {
-    margin-top: 5%;
-}
-
 .form-control {
     margin-top: 10px;
 }
 
-.authBtns {
-    margin-top: 3%;
-}
+
 
 .currentUser {
     text-align: end;

@@ -1,15 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-
 import { Component, OnInit, ChangeDetectorRef, AfterContentChecked } from '@angular/core';
-import { AuthenticationService } from './authentication.service';
-
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from './auth/auth.service';
 
 
 interface Genre {
   genre: string,
   id: number
-
 };
 
 @Component({
@@ -19,8 +17,7 @@ interface Genre {
 })
 
 export class AppComponent implements OnInit, AfterContentChecked{
-  constructor(private httpClient: HttpClient,  private changeDetector: ChangeDetectorRef, private authService: AuthenticationService) { }
-  isLoginMode = true;
+  constructor(private httpClient: HttpClient,  private changeDetector: ChangeDetectorRef, public router: Router, private authService: AuthService) { }
   selectedFile!: File;
   retrievedResponse: any;
   
@@ -35,7 +32,6 @@ export class AppComponent implements OnInit, AfterContentChecked{
   modalOpen: boolean = false;
   bookId: number = 0;
   bookForm!: FormGroup;
-  authForm!: FormGroup;
 
   activeGenreButton: number = 0;
   pagesTotal: number = 0;
@@ -44,36 +40,25 @@ export class AppComponent implements OnInit, AfterContentChecked{
   chosenCategory: string = "";
 
   loading: boolean = false; 
-  isUserLoggedIn: boolean = false;
   currentUser: any;
-  userExists: boolean = false;
-  loginStatusCode: number = 0;
-
+  
 
   ngOnInit() {
-    this.userStatus();
+   
     this.loading = true;
    
-    if (this.isUserLoggedIn) {
+    if (this.authService.isAuthenticated()) {
       this.getAllGenres();
       this.getAllBooks();
-         this.currentUser = sessionStorage.getItem("username");
+      this.currentUser = sessionStorage.getItem("username");
     }
    
-    this.resetForm();
-    this.resetAuthForm();
-  
-    
+    this.resetForm(); 
   }
 
   // prevents the error NG0100: ExpressionChangedAfterItHasBeenCheckedError when changing the page
   ngAfterContentChecked(): void {
     this.changeDetector.detectChanges();
-  }
-
-   userStatus() {
-    let user = sessionStorage.getItem("username");
-    this.isUserLoggedIn = !(user === null);
   }
 
   getAllBooks() {
@@ -222,67 +207,16 @@ export class AppComponent implements OnInit, AfterContentChecked{
     this.bookId = 0;
     this.selectedGenre = "";
     this.toggleModal();
-    
   }
 
-  login(username: string, password: string) {
-    
-    this.authService.login(username, password).subscribe((response: any) => {
-
-      sessionStorage.setItem("username", username);
-      this.currentUser = username;
-      let tokenStr = response.headers.get('Authorization');
-      sessionStorage.setItem("token", tokenStr);
-    
-      this.userStatus();
-      this.resetAuthForm();
-      this.getAllBooks();
-      this.getAllGenres();
-          
-    }, error => {
-      this.loginStatusCode = error.status; 
-     
-    });
-  }
-
-  onAuthSubmit() {
-    const { username, password } = this.authForm.value;
-    
-    if (this.isLoginMode) {
-      this.login(username, password);
-    } else {
-      const body = { username: username, password: password };
-      this.httpClient.post("http://localhost:8080/users/signup", body, {  observe: 'response' })
-          .subscribe(response => {
-            this.login(username, password);
-           
-          }, error => {
-           
-            this.userExists = true;
-          } ); 
-    
-     this.userExists = false;
-    }
-   
-  }
-
-  hideAuthErrorMessage() {
-    this.loginStatusCode = 0;
-    this.userExists = false;
-  }
-
+ 
   logOut() {
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("token");
 
-    this.userStatus();
     this.activeGenreButton = 0;
     this.chosenCategory = "";
-  }
-
-
-  onSwitchMode() {
-    this.isLoginMode = !this.isLoginMode;
+    this.router.navigate(['auth']);
   }
 
    resetForm() {
@@ -295,13 +229,6 @@ export class AppComponent implements OnInit, AfterContentChecked{
    
       })
    }
-  
-  resetAuthForm() {
-    this.authForm = new FormGroup({
-      'username': new FormControl(null, [Validators.required]),
-      'password': new FormControl(null, [Validators.required])
-    })
-  }
   
   getAPIResponseAndImage(response: any) {
     if (response) this.loading = false;
