@@ -1,0 +1,266 @@
+.container {
+    margin: 20px auto;
+}
+
+.currentUser {
+    text-align: end;
+}
+
+.logoutBtn {
+    display: block;
+    margin: 0 0 10px auto;
+}
+
+.chosenGenre {
+    margin: 10px 0 0;
+    padding: 3px 0;
+    width: auto;
+    text-align: center;
+
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+
+    cursor: pointer;
+}
+
+.dropdownContainer {
+    background-color: #fff;
+    position: absolute;
+    width: 466px;
+    border: solid #e5e5e5;
+    border-width: 0 2px 2px 2px;
+    text-align: center;
+    z-index: 1;
+    max-height: 120px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.dropdownList {
+    margin: 0 auto;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.fileInput {
+    margin-top: 10px;
+}
+
+
+
+.bookList {
+    margin: 0 auto;
+    padding: 0;
+}
+
+.form-select {
+    width: 90%;
+    margin: auto;
+}
+
+.bookItem {
+    display: flex;
+
+    margin: 15px 0;
+    padding: 15px;
+    height: 260px;
+
+    list-style-type: none;
+    position: relative;
+
+    transition: background-color 0.5s ease;
+
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.bookItem:hover {
+    background-color: #eff5f5;
+
+}
+
+.bookItem:hover .bookCover {
+    transform: rotateY(35deg);
+}
+
+.bookItem:hover .description {
+    overflow-y: auto;
+}
+
+
+.bookCover {
+    margin: 20px;
+    max-width: 40%;
+    height: 200px;
+
+    transform-style: preserve-3d;
+    background-position: center;
+    transition: all 0.3s;
+
+    position: relative;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.bookCover::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    transform: rotateY(90deg);
+    transform-origin: 0 50%;
+    filter: brightness(70%);
+}
+
+.bookTitle {
+    text-transform: capitalize;
+    scrollbar-gutter: stable;
+    width: 80%;
+}
+
+.author {
+    text-transform: capitalize;
+    width: 80%;
+}
+
+.description {
+    overflow: hidden;
+    scrollbar-gutter: stable;
+    width: 80%;
+    height: 55%;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}
+
+.descriptionInput {
+    width: 100%;
+    min-height: 70px;
+    outline: none;
+    resize: none;
+    margin-bottom: 10px;
+}
+
+.genreItem {
+    list-style-type: none;
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
+
+.genreItem:hover {
+    color: #3faffa;
+    font-weight: 600;
+    background-color: rgb(225, 225, 234);
+}
+
+.searchInput {
+    margin: 0;
+}
+
+.searchInput::-webkit-search-cancel-button {
+    cursor: pointer;
+}
+
+.searchInputBox {
+    display: flex;
+    margin: 0 auto;
+}
+
+.nav-pills {
+    margin: 10px 0;
+    justify-content: center;
+}
+
+.button {
+    background-color: transparent;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    width: 250px;
+    margin: auto 10px;
+    height: 38px;
+}
+
+.button:hover {
+    background-color: #eff5f5;
+}
+
+.deleteButton {
+    position: absolute;
+    right: 30px;
+    top: 30px;
+    background-color: transparent;
+    border: none;
+    width: 30px;
+    height: 32px;
+    background-image: url(../images/bin.svg);
+}
+
+.deleteButton:focus,
+.deleteButton:hover,
+.updateButton:focus,
+.updateButton:hover {
+    transform: scale(1.2);
+}
+
+.updateButton {
+    position: absolute;
+    right: 30px;
+    top: 80px;
+    background-color: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    background-image: url(../images/update.svg);
+}
+
+.modal {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.2);
+    opacity: 1;
+}
+
+.paginationList {
+    display: flex;
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+.paginationBtn {
+    margin: 0 5px;
+}
+
+.paginationInput,
+.paginationTotalPages {
+    width: 35px;
+    font-weight: 500;
+}
+
+.paginationInput {
+    height: 38px;
+    text-align: center;
+    vertical-align: bottom;
+}
+
+.paginationTotalPages {
+    margin: auto 0 auto 5px;
+    vertical-align: middle;
+}
+
+
+@media screen and (min-width: 768px) {
+    .bookList {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        max-width: 1200px;
+    }
+}
+
+@media screen and (min-width: 832px) {
+    .form-select {
+        width: 15%;
+        margin: 0 15px 0 auto;
+    }
+}

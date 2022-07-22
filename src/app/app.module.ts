@@ -14,6 +14,7 @@ import { BookShelfComponent } from './book-shelf/book-shelf.component';
 import { AuthGuardService } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
 import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
+import { SvgHeartComponent } from './svg/heart/heart.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
     PaginationDirective,
     AuthComponent,
     BookShelfComponent,
+    SvgHeartComponent,
    
   ],
   imports: [
