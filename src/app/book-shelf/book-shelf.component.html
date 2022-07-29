@@ -1,7 +1,6 @@
-<div class="container" *ngIf="currentUser">
-    <!-- <p class="currentUser">Logged in as {{currentUser | json}}</p>
-    <button class="btn btn-primary logoutBtn" (click)="logOut()" type="button">Log Out</button> -->
-    <button type="button" class="btn btn-info logoutBtn" (click)="openLibrary()">Open library</button>
+<div class="container" >
+   
+    <button type="button" class="btn btn-info menuBtn" (click)="openLibrary()">Open library</button>
     <div class="col-md-6 searchInputBox ">
         <input type="search" class="form-control searchInput" id="name" placeholder="Search"
             [(ngModel)]="bookTitle" (input)="getFilteredBooks()" name="name" />

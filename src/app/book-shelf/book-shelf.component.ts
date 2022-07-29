@@ -40,9 +40,7 @@ export class BookShelfComponent implements OnInit, AfterContentChecked{
   chosenCategory: string = "";
 
   loading: boolean = false; 
-  currentUser: any;
-
-
+ 
   ngOnInit() {
    
     this.loading = true;
@@ -50,7 +48,6 @@ export class BookShelfComponent implements OnInit, AfterContentChecked{
     if (this.authService.isAuthenticated()) {
       this.getAllGenres();
       this.getAllBooks();
-      this.currentUser = sessionStorage.getItem("username");
     }
    
     this.resetForm(); 

@@ -11,12 +11,12 @@ const appRoutes: Routes = [
      { path: 'bookShelf', component: BookShelfComponent, canActivate: [AuthGuard] },
      { path: 'library', component: LibraryPageComponent, canActivate: [AuthGuard] },
    
-    // { path: 'auth', loadChildren: () => import('./auth/auth.component').then(mod => mod.AuthComponent)},
+    
       { path: 'auth', component: AuthComponent },
 ];
 
 @NgModule({
-    imports: [RouterModule.forRoot(appRoutes, { preloadingStrategy: PreloadAllModules, initialNavigation: 'enabledBlocking' })],
+    imports: [RouterModule.forRoot(appRoutes)],
     exports: [RouterModule]
 })
 
