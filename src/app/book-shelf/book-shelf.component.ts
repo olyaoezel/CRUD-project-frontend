@@ -218,6 +218,9 @@ export class BookShelfComponent implements OnInit, AfterContentChecked{
     this.chosenCategory = "";
     this.router.navigate(['auth']);
   }
+  openLibrary() {
+    this.router.navigate(['library']);
+  }
 
    resetForm() {
        this.bookForm = new FormGroup({

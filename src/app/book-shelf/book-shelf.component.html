@@ -1,8 +1,9 @@
 <div class="container" *ngIf="currentUser">
-    <p class="currentUser">Logged in as {{currentUser | json}}</p>
-    <button class="btn btn-primary logoutBtn" (click)="logOut()" type="button">Log Out</button>
+    <!-- <p class="currentUser">Logged in as {{currentUser | json}}</p>
+    <button class="btn btn-primary logoutBtn" (click)="logOut()" type="button">Log Out</button> -->
+    <button type="button" class="btn btn-info logoutBtn" (click)="openLibrary()">Open library</button>
     <div class="col-md-6 searchInputBox ">
-        <input type="search" class="form-control searchInput" id="name" placeholder="Search Library"
+        <input type="search" class="form-control searchInput" id="name" placeholder="Search"
             [(ngModel)]="bookTitle" (input)="getFilteredBooks()" name="name" />
         <button type="button" aria-label="add a book" class="button" (click)="toggleModal()">Add a new book</button>
     </div>
@@ -77,7 +78,7 @@
 
             <button aria-label="delete" class="deleteButton" (click)="onDelete(book?.id)"></button>
             <button aria-label="update" class="updateButton" (click)="openUpdateBookModal(book?.id)"></button>
-            <svg-heart></svg-heart>
+            <!-- <svg-heart></svg-heart> -->
            
 
             <img [src]="book?.image" alt="" class="bookCover">

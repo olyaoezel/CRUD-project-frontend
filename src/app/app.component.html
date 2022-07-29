@@ -1,2 +1,6 @@
 
+<div class="container" *ngIf="currentUser">
+    <p class="currentUser">Logged in as {{currentUser | json}}</p>
+    <button class="btn btn-primary logoutBtn" (click)="logOut()" type="button">Log Out</button>
+</div>
 <router-outlet></router-outlet>

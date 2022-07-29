@@ -15,6 +15,7 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { AuthService } from './auth/auth.service';
 import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
 import { SvgHeartComponent } from './svg/heart/heart.component';
+import { LibraryPageComponent } from './library-page/library-page.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { SvgHeartComponent } from './svg/heart/heart.component';
     AuthComponent,
     BookShelfComponent,
     SvgHeartComponent,
+    LibraryPageComponent,
    
   ],
   imports: [

@@ -1,16 +1,3 @@
-.container {
-    margin: 20px auto;
-}
-
-.currentUser {
-    text-align: end;
-}
-
-.logoutBtn {
-    display: block;
-    margin: 0 0 10px auto;
-}
-
 .chosenGenre {
     margin: 10px 0 0;
     padding: 3px 0;
